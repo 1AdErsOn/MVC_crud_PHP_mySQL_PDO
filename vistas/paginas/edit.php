@@ -1,3 +1,22 @@
+<?php
+if(!empty($_GET['id'])){
+    $id = $_GET['id'];
+    $userData = ControladorCRUD::ctrSee($id);
+}
+
+// Redirect to list page if invalid request submitted 
+if(empty($userData)){ 
+    header("Location: index.php"); 
+    exit; 
+}
+
+// Get submitted form data  
+$postData = array(); 
+if(!empty($sessData['postData'])){ 
+    $postData = $sessData['postData']; 
+    unset($_SESSION['postData']); 
+} 
+?>
 <div class="container">
 <!-- Content here -->
 
@@ -17,7 +36,7 @@
         <?php } ?>
         
         <div class="col-md-12">
-            <form method="post" action="action.php" class="form">
+            <form method="post"class="form">
                 <div class="form-group">
                     <label>Name</label>
                     <input type="text" class="form-control" name="name" value="<?php echo !empty($postData['name'])?$postData['name']:$userData['name']; ?>" required="">
@@ -33,6 +52,10 @@
                 <input type="hidden" name="id" value="<?php echo $userData['id']; ?>"/>
                 <input type="hidden" name="action_type" value="edit"/>
                 <input type="submit" class="form-control btn-primary" name="submit" value="Update User"/>
+                <?php
+                $registro = new ControladorCRUD();
+                $registro->ctrEdit();
+                ?>
             </form>
         </div>
     </div>

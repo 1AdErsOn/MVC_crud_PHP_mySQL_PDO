@@ -1,3 +1,11 @@
+<?php
+// Get submitted form data  
+$postData = array(); 
+if(!empty($sessData['postData'])){ 
+    $postData = $sessData['postData']; 
+    unset($_SESSION['postData']); 
+}
+?>
 <div class="container">
 <!-- Content here -->
 

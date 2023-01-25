@@ -71,4 +71,49 @@ class ModeloCRUD{
         } 
         return !empty($data)?$data:false; 
     }
+    public function update($table,$data,$conditions){ 
+        if(!empty($data) && is_array($data)){ 
+            $colvalSet = ''; 
+            $whereSql = ''; 
+            $i = 0; 
+            if(!array_key_exists('modified',$data)){ 
+                $data['modified'] = date("Y-m-d H:i:s"); 
+            } 
+            foreach($data as $key=>$val){ 
+                $pre = ($i > 0)?', ':''; 
+                $colvalSet .= $pre.$key."='".$val."'"; 
+                $i++; 
+            } 
+            if(!empty($conditions)&& is_array($conditions)){ 
+                $whereSql .= ' WHERE '; 
+                $i = 0; 
+                foreach($conditions as $key => $value){ 
+                    $pre = ($i > 0)?' AND ':''; 
+                    $whereSql .= $pre.$key." = '".$value."'"; 
+                    $i++; 
+                } 
+            } 
+            $sql = "UPDATE ".$table." SET ".$colvalSet.$whereSql; 
+            $query = Conexion::conectar()->prepare($sql); 
+            $update = $query->execute(); 
+            return $update?$query->rowCount():false; 
+        }else{ 
+            return false; 
+        } 
+    }
+    public function delete($table,$conditions){ 
+        $whereSql = ''; 
+        if(!empty($conditions)&& is_array($conditions)){ 
+            $whereSql .= ' WHERE '; 
+            $i = 0; 
+            foreach($conditions as $key => $value){ 
+                $pre = ($i > 0)?' AND ':''; 
+                $whereSql .= $pre.$key." = '".$value."'"; 
+                $i++; 
+            } 
+        } 
+        $sql = "DELETE FROM ".$table.$whereSql; 
+        $delete = Conexion::conectar()->exec($sql); 
+        return $delete?$delete:false; 
+    }
 }

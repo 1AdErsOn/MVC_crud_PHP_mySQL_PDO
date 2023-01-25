@@ -1,6 +1,19 @@
 <?php
+if(isset($_GET['id'])){
+    $id = $_GET['id'];
+    $registro = new ControladorCRUD();
+    $registro->ctrDelete($id);
+                        
+}
+
+// Fetch the users data 
 $users = ControladorCRUD::ctrShow();
-//print_r($users);
+
+// Retrieve status message from session 
+if(!empty($_SESSION['statusMsg'])){ 
+    echo '<p>'.$_SESSION['statusMsg'].'</p>'; 
+    unset($_SESSION['statusMsg']); 
+}
 ?>
 <div class="container">
 <!-- Content here -->
@@ -41,7 +54,7 @@ $users = ControladorCRUD::ctrShow();
                     <td><?php echo $row['created']; ?></td>
                     <td>
                         <a href="index.php?pagina=edit&id=<?php echo $row['id']; ?>" class="btn btn-warning">edit</a>
-                        <a href="action.php?action_type=delete&id=<?php echo $row['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete data?');">delete</a>
+                        <a href="index.php?pagina=start&action_type=delete&id=<?php echo $row['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete data?');">delete</a>
                     </td>
                 </tr>
                 <?php } }else{ ?>
